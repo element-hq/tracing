@@ -602,7 +602,8 @@ impl Inner {
                     return None;
                 }
 
-                let created = metadata.created().ok()?;
+                // TODO: remove once https://github.com/tokio-rs/tracing/issues/2937 is fixed
+                let created = metadata.created().ok().or(metadata.modified().ok())?;
                 Some((entry, created))
             })
             .collect::<Vec<_>>()
